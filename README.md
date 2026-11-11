@@ -17,6 +17,8 @@ Same person, same laptop. The first clip is real. The second was typed, not spok
 
 The voice is the author's own, shared with his consent. Details in [demo/](demo/README.md). This audio was created with Boson AI's Higgs Audio — https://www.boson.ai/higgs-audio
 
+▶️ **Watch the 2-minute walkthrough** (narrated by the clone): https://youtu.be/Bhkm1khr0vs
+
 ## Three commands
 
 ```bash
