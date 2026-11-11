@@ -5,6 +5,7 @@ voices/*
 *.mp3
 *.m4a
 *.flac
+!demo/*.mp3
 out/
 takes/
 models/

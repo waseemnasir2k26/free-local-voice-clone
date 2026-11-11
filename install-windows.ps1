@@ -17,10 +17,13 @@
 
 param(
     [string]$Dir = "C:\voiceclone",
-    [string]$ModelPath = ""        # already have the .gguf? pass its full path to skip the 5.1 GB download
+    [string]$ModelPath = "",       # already have the .gguf? pass its full path to skip the 5.1 GB download
+    [switch]$NoPath                # do not add the install folder to your PATH
 )
 
-$ErrorActionPreference = "Stop"
+# Windows PowerShell turns any text a program prints on stderr into an error, so do not stop
+# on those. Every step below checks its own exit code instead.
+$ErrorActionPreference = "Continue"
 $ProgressPreference = "SilentlyContinue"
 
 $Ver       = "v0.9.2"   # the audio.cpp version this tool was tested with
@@ -57,7 +60,7 @@ function Get-File($url, $out, [long]$size) {
 function Find-Python {
     foreach ($v in "3.12", "3.11", "3.13", "3.10") {
         if (Get-Command py -ErrorAction SilentlyContinue) {
-            & py "-$v" -c "import sys" 2>$null
+            & cmd.exe /c "py -$v -c `"import sys`" >nul 2>nul"
             if ($LASTEXITCODE -eq 0) { return @("py", "-$v") }
         }
     }
@@ -68,7 +71,7 @@ function Find-Python {
     }
     $cmd = Get-Command python -ErrorAction SilentlyContinue
     if ($cmd -and $cmd.Source -notlike "*WindowsApps*") {
-        & python -c "import sys; raise SystemExit(0 if (3,10) <= sys.version_info[:2] <= (3,13) else 1)" 2>$null
+        & cmd.exe /c "python -c `"import sys; raise SystemExit(0 if (3,10) <= sys.version_info[:2] <= (3,13) else 1)`" >nul 2>nul"
         if ($LASTEXITCODE -eq 0) { return @("python") }
     }
     return $null
@@ -80,7 +83,7 @@ Write-Host "Install folder: $Dir"
 # ---------------------------------------------------------------- 1. checks
 Step "1/6 Checking this computer"
 if ($Dir -match "\s") { Stop-Install "the install folder must not contain spaces. Use something like C:\voiceclone" }
-New-Item -ItemType Directory -Force -Path $Dir, "$Dir\downloads", "$Dir\audiocpp", "$Dir\models", "$Dir\voices" | Out-Null
+New-Item -ItemType Directory -Force -Path $Dir, "$Dir\downloads", "$Dir\audiocpp", "$Dir\models", "$Dir\voices" -ErrorAction Stop | Out-Null
 $drive = (Get-Item $Dir).PSDrive
 $needGb = if ($ModelPath) { 5 } else { 12 }
 $freeGb = [math]::Round($drive.Free / 1GB, 1)
@@ -88,15 +91,27 @@ Write-Host "   free disk space on $($drive.Name): $freeGb GB (need about $needGb
 if ($freeGb -lt $needGb) { Stop-Install "not enough free disk space. Free up at least $needGb GB on drive $($drive.Name):" }
 
 $backend = "vulkan"
-if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
-    $gpu = (& nvidia-smi --query-gpu=name,memory.total --format=csv,noheader,nounits | Select-Object -First 1)
-    if ($LASTEXITCODE -eq 0 -and $gpu) {
-        $backend = "cuda"
-        $vram = [int]($gpu.Split(",")[-1].Trim())
-        Write-Host "   graphics card: $gpu MB"
-        if ($vram -lt 7000) {
-            Write-Host "   WARNING: less than 8 GB of video memory. It may run slowly or run out of memory." -ForegroundColor Yellow
+$cards = @(Get-CimInstance Win32_VideoController -ErrorAction SilentlyContinue | ForEach-Object { $_.Name })
+$nvidia = $cards | Where-Object { $_ -match "NVIDIA" } | Select-Object -First 1
+if ($nvidia) {
+    $backend = "cuda"
+    Write-Host "   graphics card: $nvidia"
+    $vram = 0
+    if (Get-Command nvidia-smi -ErrorAction SilentlyContinue) {
+        foreach ($try in 1..3) {   # a sleeping laptop GPU can fail the first query
+            $lines = @(& nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits)
+            if ($LASTEXITCODE -eq 0 -and $lines.Count -gt 0 -and "$($lines[0])".Trim() -match "^\d+$") {
+                $vram = [int]("$($lines[0])".Trim()); break
+            }
+            Start-Sleep -Seconds 2
         }
+    }
+    if ($vram -gt 0) { Write-Host "   video memory: $vram MB" }
+    if ($vram -gt 0 -and $vram -lt 7000) {
+        Write-Host "   WARNING: less than 8 GB of video memory. It may run slowly or run out of memory." -ForegroundColor Yellow
+    }
+    if ($vram -eq 0) {
+        Write-Host "   WARNING: could not read the NVIDIA driver. Update your graphics driver if voicing fails." -ForegroundColor Yellow
     }
 }
 if ($backend -eq "vulkan") {
@@ -130,7 +145,13 @@ if ($backend -eq "cuda") {
 }
 foreach ($z in $zips) {
     Write-Host "   unpacking $z ..."
-    & tar.exe -xf "$Dir\downloads\$z" -C "$Dir\audiocpp"
+    $winTar = "$env:SystemRoot\System32\tar.exe"   # the Windows one; other tars on PATH misread C:\ paths
+    if (Test-Path $winTar) {
+        & $winTar -xf "$Dir\downloads\$z" -C "$Dir\audiocpp"
+    } else {
+        Expand-Archive -Path "$Dir\downloads\$z" -DestinationPath "$Dir\audiocpp" -Force
+        $LASTEXITCODE = if ($?) { 0 } else { 1 }
+    }
     if ($LASTEXITCODE -ne 0) { Stop-Install "could not unpack $z. Delete $Dir\downloads\$z and run the installer again." }
 }
 if (-not (Test-Path "$Dir\audiocpp\audiocpp_cli.exe")) { Stop-Install "audiocpp_cli.exe is missing after unpacking." }
@@ -172,7 +193,7 @@ if not defined VOICECLONE_VOICES set "VOICECLONE_VOICES=$Dir\voices"
 Set-Content -Path "$Dir\voiceclone.cmd" -Value $launcher -Encoding ASCII
 
 $userPath = [Environment]::GetEnvironmentVariable("Path", "User")
-if (($userPath -split ";") -notcontains $Dir) {
+if (-not $NoPath -and ($userPath -split ";") -notcontains $Dir) {
     [Environment]::SetEnvironmentVariable("Path", ($userPath.TrimEnd(";") + ";" + $Dir), "User")
     Write-Host "   added $Dir to your PATH (new PowerShell windows can run: voiceclone)"
 }

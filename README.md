@@ -1,10 +1,23 @@
 # Free Local Voice Clone: clone your own voice on your own laptop
 
-**Free, offline voice cloning and text to speech. 15 seconds of audio in, unlimited voiceover out. No subscription, no upload, no per-character bill.**
+**Free local voice cloning and text to speech for your own content. Clone your voice from 15 to 20 seconds of audio, voice complete scripts, and run the whole voiceover pipeline on your own computer. No subscription, no per-character bill, and your voice is never uploaded.**
 
 A small Python tool that turns [Higgs Audio v3](https://huggingface.co/bosonai/higgs-tts-3-4b) and [audio.cpp](https://github.com/0xShug0/audio.cpp) into a voiceover pipeline you can actually run a channel on: whole scripts in one command, several cloned voices in one episode, automatic retries when the model misbehaves, and a Whisper check that tells you which lines to re-listen to.
 
-![License: MIT](https://img.shields.io/badge/code-MIT-green) ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue) ![Runs offline](https://img.shields.io/badge/runs-100%25%20offline-black) ![GPU: 8 GB](https://img.shields.io/badge/GPU-8%20GB%20is%20enough-orange)
+![License: MIT](https://img.shields.io/badge/code-MIT-green) ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue) ![Generation runs on your device](https://img.shields.io/badge/generation-on%20your%20device-black) ![Tested on RTX 4060 8 GB](https://img.shields.io/badge/tested-RTX%204060%208%20GB-orange)
+
+## Hear it first
+
+Same person, same laptop. The first clip is real. The second was typed, not spoken.
+
+| | |
+|---|---|
+| 🎙️ [Real voice, 15 seconds](demo/1-real-voice-15s.mp3) | The only audio the model was given |
+| 🤖 [Cloned voice](demo/2-cloned-voice.mp3) | He never said these words. First take, no edits |
+
+The voice is the author's own, shared with his consent. Details in [demo/](demo/README.md). This audio was created with Boson AI's Higgs Audio — https://www.boson.ai/higgs-audio
+
+## Three commands
 
 ```bash
 voiceclone ref   --in my-recording.m4a --start 8 --dur 15 --name me
@@ -18,12 +31,12 @@ This is the voice pipeline we run at [SkynetLabs](https://skynetjoe.com) for two
 
 ## Why bother running it locally
 
-- **Zero running cost.** No monthly plan, no character quota, no "you ran out of credits on line 1,400". Your electricity is the bill.
+- **No per-character bill.** No monthly plan, no character quota, no "you ran out of credits on line 1,400". The limits are your hardware and the model licence.
 - **Your voice never leaves your machine.** The reference clip and every script stay on your disk. Nothing is uploaded anywhere.
 - **Unlimited retakes.** Change one word, re-voice the line, pay nothing. This changes how you write: you stop rationing edits.
 - **Many voices, one show.** Write `zoya: ...` and `chacha: ...` in a script and each line is voiced by the right clone.
 - **Works where cards do not.** No international card, no dollar subscription, no payment gateway. Built by a team in Pakistan and Bali for people in the same spot.
-- **Urdu, Hindi, Arabic and about 100 more languages** come with the model, including Roman Urdu mixed with English.
+- **English, Urdu and Roman Urdu are tested in production**, mixed in the same sentence. The model card lists about 100 languages; we have not tested the others.
 
 ## Is this a real ElevenLabs alternative?
 
@@ -47,7 +60,20 @@ This project is not affiliated with ElevenLabs or Boson AI.
 
 ## Quick start
 
-You need Python 3.10+, about 6 GB of disk, and ideally an NVIDIA GPU with 8 GB. Full walkthrough with download links: [docs/SETUP.md](docs/SETUP.md).
+### Windows, one step (recommended)
+
+Open PowerShell and paste these two lines. It downloads everything (about 6.2 GB) into `C:oiceclone`, sets it up, and runs a self-check. Internet is needed for this setup only; generation afterwards runs on your device.
+
+```powershell
+irm https://raw.githubusercontent.com/waseemnasir2k26/free-local-voice-clone/main/install-windows.ps1 -OutFile $env:TEMPc-install.ps1
+powershell -ExecutionPolicy Bypass -File $env:TEMPc-install.ps1
+```
+
+Then open a new PowerShell window and jump to "make a voice" below.
+
+### Manual setup (Linux, macOS, or if you prefer)
+
+You need Python 3.10+, about 12 GB of free disk during setup, and ideally an NVIDIA GPU with 8 GB. Full walkthrough with download links: [docs/SETUP.md](docs/SETUP.md).
 
 ```bash
 # 1. this tool
@@ -179,6 +205,10 @@ tests/                 16 tests, no GPU needed (pytest)
 ## Contributing
 
 Issues and pull requests are welcome, especially: test reports on Linux, macOS and AMD cards, pronunciation tables for other languages, and better room tone. Run `pytest` before you open a PR.
+
+## Need a custom AI workflow?
+
+We build AI automation systems and content production workflows at [SkynetLabs](https://skynetjoe.com). The MIT licence on this code does not grant commercial rights to the model; that is between you and Boson AI.
 
 ## Credits
 
