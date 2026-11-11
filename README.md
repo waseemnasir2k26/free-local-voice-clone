@@ -1,6 +1,6 @@
-# local-voice-clone
+# Free Local Voice Clone: clone your own voice on your own laptop
 
-**Clone your voice on your own laptop. 15 seconds of audio in, unlimited voiceover out. No subscription, no upload, no per-character bill.**
+**Free, offline voice cloning and text to speech. 15 seconds of audio in, unlimited voiceover out. No subscription, no upload, no per-character bill.**
 
 A small Python tool that turns [Higgs Audio v3](https://huggingface.co/bosonai/higgs-tts-3-4b) and [audio.cpp](https://github.com/0xShug0/audio.cpp) into a voiceover pipeline you can actually run a channel on: whole scripts in one command, several cloned voices in one episode, automatic retries when the model misbehaves, and a Whisper check that tells you which lines to re-listen to.
 
@@ -51,8 +51,8 @@ You need Python 3.10+, about 6 GB of disk, and ideally an NVIDIA GPU with 8 GB. 
 
 ```bash
 # 1. this tool
-git clone https://github.com/waseemnasir2k26/local-voice-clone
-cd local-voice-clone
+git clone https://github.com/waseemnasir2k26/free-local-voice-clone
+cd free-local-voice-clone
 pip install -e ".[qc]"
 
 # 2. the runtime: download the audio.cpp release for your system, unzip it

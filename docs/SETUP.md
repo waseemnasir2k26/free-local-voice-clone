@@ -5,8 +5,8 @@ Tested by us on Windows 11, RTX 4060 Laptop (8 GB), audio.cpp 0.9.2 with the CUD
 ## 1. Install this tool
 
 ```bash
-git clone https://github.com/waseemnasir2k26/local-voice-clone
-cd local-voice-clone
+git clone https://github.com/waseemnasir2k26/free-local-voice-clone
+cd free-local-voice-clone
 python -m venv .venv
 
 # Windows
