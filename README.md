@@ -44,10 +44,10 @@ For recorded voiceover on your own channels: yes, that is exactly what we replac
 
 |                                              | local-voice-clone                                                                     | ElevenLabs (hosted)               |
 | -------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------------------- |
-| Cost                                         | Free to run                                                                           | Subscription with monthly credits |
-| Where your voice data lives                  | Your disk                                                                             | Their servers                     |
+| Cost | Free to run | Paid plans, see their site |
+| Where generation runs | Your computer | Hosted in the cloud |
 | Usage limit                                  | Your GPU and your patience                                                            | Your plan                         |
-| Setup                                        | About 20 minutes, 5 GB download                                                       | Sign up and go                    |
+| Setup | About 20 minutes, about 6 GB download | Sign up and go |
 | Hardware                                     | A GPU with 8 GB helps a lot                                                           | Any device with a browser         |
 | Speed                                        | About 0.7x real time on an RTX 4060, after a 40 s model load                          | Near instant                      |
 | Real-time agents, phone bots, streaming      | No                                                                                    | Yes                               |
@@ -62,11 +62,11 @@ This project is not affiliated with ElevenLabs or Boson AI.
 
 ### Windows, one step (recommended)
 
-Open PowerShell and paste these two lines. It downloads everything (about 6.2 GB) into `C:oiceclone`, sets it up, and runs a self-check. Internet is needed for this setup only; generation afterwards runs on your device.
+Open PowerShell and paste these two lines. It downloads everything (about 6.2 GB) into `C:\voiceclone`, sets it up, and runs a self-check. Internet is needed for this setup only; generation afterwards runs on your device.
 
 ```powershell
-irm https://raw.githubusercontent.com/waseemnasir2k26/free-local-voice-clone/main/install-windows.ps1 -OutFile $env:TEMPc-install.ps1
-powershell -ExecutionPolicy Bypass -File $env:TEMPc-install.ps1
+irm https://raw.githubusercontent.com/waseemnasir2k26/free-local-voice-clone/main/install-windows.ps1 -OutFile $env:TEMP\vc-install.ps1
+powershell -ExecutionPolicy Bypass -File $env:TEMP\vc-install.ps1
 ```
 
 Then open a new PowerShell window and jump to "make a voice" below.
@@ -139,7 +139,7 @@ The model is the hard part and it is not ours. What we add is the boring layer w
 
 ## Numbers, measured
 
-One speaker, one laptop (RTX 4060 Laptop, 8 GB). Your results will differ.
+One laptop (RTX 4060 Laptop, 8 GB). Similarity and word accuracy are for one speaker; the largest run used six voices. Your results will differ.
 
 | What                                                                | Result                                                       |
 | ------------------------------------------------------------------- | ------------------------------------------------------------ |
