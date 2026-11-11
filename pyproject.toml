@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "local-voice-clone"
+version = "1.0.0"
+description = "Clone a voice on your own GPU with Higgs Audio v3 + audio.cpp. Batch scripts, multi-speaker shows, runaway-line retries, Whisper QC. No subscription, no upload."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Waseem Nasir (SkynetLabs)" }]
+keywords = [
+  "voice cloning", "text to speech", "tts", "local tts", "higgs audio", "audio.cpp", "gguf",
+  "elevenlabs alternative", "urdu tts", "voiceover", "faceless youtube", "open source tts",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+qc = ["faster-whisper>=1.0"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+voiceclone = "voiceclone.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/waseemnasir2k26/local-voice-clone"
+Issues = "https://github.com/waseemnasir2k26/local-voice-clone/issues"
+
+[tool.setuptools]
+packages = ["voiceclone"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

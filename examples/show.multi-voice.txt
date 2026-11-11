@@ -1,0 +1,7 @@
+# Two cloned voices in one episode. `name:` picks the voice in voices/<name>.wav
+# Run: voiceclone batch --voice host --file examples/show.multi-voice.txt --out takes --join show.wav
+host: Welcome back to the show. Today, one question. Can a laptop replace a voice subscription?
+guest: Sir jee, pehle yeh batayein, yeh free mein kaise ho sakta hai?
+host: The model runs on the graphics card you already own. No upload, no monthly bill.
+guest: Aur awaaz? Kya woh bilkul asli lagti hai?
+host: You are listening to it right now. Neither of us recorded these lines.

@@ -1,0 +1,18 @@
+# Your voice stays on your machine.
+voices/*
+!voices/README.md
+*.wav
+*.mp3
+*.m4a
+*.flac
+out/
+takes/
+models/
+*.gguf
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+build/
+dist/
+.env

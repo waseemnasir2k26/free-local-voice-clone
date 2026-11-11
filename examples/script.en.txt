@@ -1,0 +1,5 @@
+# One line of speech per line. Lines starting with # are skipped.
+Most people connect the form straight to their email and think the job is done. It is not.
+Look at that. The reply landed in twelve seconds. Twelve.
+If you can copy and paste, you can build this. The free file is in the description.
+You do not need to code. You need n8n and ten minutes.

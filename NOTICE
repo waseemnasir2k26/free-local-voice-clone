@@ -1,0 +1,18 @@
+local-voice-clone
+Copyright (c) 2026 Waseem Nasir (SkynetLabs). MIT License (see LICENSE).
+
+This repository contains only orchestration code. It does not contain, bundle or
+redistribute any model weights or third-party binaries. Users download these themselves
+and are bound by their licences:
+
+- Higgs TTS 3 (Higgs Audio v3 TTS), Boson AI USA, Inc.
+  "Boson Higgs TTS 3 is licensed under the Boson Higgs TTS 3 Research and Non-Commercial
+  License, Copyright (c) Boson AI USA, Inc. All Rights Reserved."
+  https://huggingface.co/bosonai/higgs-tts-3-4b/blob/main/LICENSE
+  Built with Higgs TTS 3 licensed from Boson AI USA, Inc.
+
+- audio.cpp, ShugoAI LLC, Apache License 2.0
+  https://github.com/0xShug0/audio.cpp
+
+Not affiliated with or endorsed by Boson AI, ShugoAI or ElevenLabs. Product names are
+used only to describe compatibility and to compare.
